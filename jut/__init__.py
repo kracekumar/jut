@@ -108,7 +108,7 @@ class FormatMixin:
                 code = Syntax(output_text, lexer_name=lexer_name)
                 panels.append(Panel(code))
             else:
-                panels.append(f"Not rendering {lexer_name}")
+                panels.append(Panel(f"[bold red] Not rendering {lexer_name} [/bold red]"))
         return panels
 
     def format_raw(self, index, cell):
@@ -129,11 +129,11 @@ class FormatMixin:
             plain = output.get("data", {}).get("text/plain")
             return plain, OUTPUT_TYPES_TO_LEXER_NAMES["text/plain"]
         elif output["output_type"] == "display_data":
-            for key, lexer_name in OUTPUT_TYPES_TO_LEXER_NAMES:
+            for key, lexer_name in OUTPUT_TYPES_TO_LEXER_NAMES.items():
                 if key in ("text", "text/plain"):
                     continue
 
-                val = output.get("data", {}).get("text/html")
+                val = output.get("data", {}).get(key)
                 if val:
                     return str(val), lexer_name
 
