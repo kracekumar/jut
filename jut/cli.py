@@ -18,7 +18,6 @@ def download_url(url):
     url_parts = urlparse(url)
     try:
         destination = url_parts.path.split("/")[-1]
-        print(url, destination)
         urlretrieve(url, destination)
     except HTTPError:
         logger.info(f'Failed to download the file in the URL" {url}')

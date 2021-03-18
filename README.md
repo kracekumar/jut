@@ -23,14 +23,19 @@ Options:
 
 ```
 
+### ASCIICinema Demo
+
+[![asciicast](https://asciinema.org/a/400349.svg)](https://asciinema.org/a/400349)
+
+
 ### Display first five cells
 
-![](https://raw.githubusercontent.com/kracekumar/jut/main/images/jut-head.png)
+![jut-head-example](https://raw.githubusercontent.com/kracekumar/jut/main/images/jut-head.png)
 
 ### Display last five cells
 
-![](https://raw.githubusercontent.com/kracekumar/jut/main/images/jut-tail.png)
+![jut-tail-example](https://raw.githubusercontent.com/kracekumar/jut/main/images/jut-tail.png)
 
 ### Download the file and display first five cells
 
-![](https://raw.githubusercontent.com/kracekumar/jut/main/images/jut-download.png)
+![jut-download-url](https://raw.githubusercontent.com/kracekumar/jut/main/images/jut-download.png)
