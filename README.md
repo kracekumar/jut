@@ -27,6 +27,10 @@ Options:
 
 ![](images/jut-head.png)
 
+### Display last five cells
+
 ![](images/jut-tail.png)
 
-![](jut-download.png)
+### Download the file and display first five cells
+
+![](images/jut-download.png)
