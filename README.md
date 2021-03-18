@@ -25,12 +25,12 @@ Options:
 
 ### Display first five cells
 
-![](images/jut-head.png)
+![](https://raw.githubusercontent.com/kracekumar/jut/main/images/jut-head.png)
 
 ### Display last five cells
 
-![](images/jut-tail.png)
+![](https://raw.githubusercontent.com/kracekumar/jut/main/images/jut-tail.png)
 
 ### Download the file and display first five cells
 
-![](images/jut-download.png)
+![](https://raw.githubusercontent.com/kracekumar/jut/main/images/jut-download.png)
