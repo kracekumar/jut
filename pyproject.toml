@@ -1,9 +1,11 @@
 [tool.poetry]
 name = "jut"
-version = "0.0.9"
+version = "0.0.10"
 description = "Render Jupyter Notebook in the terminal"
 authors = ["kracekumar <me@kracekumar.com>"]
 license = "MIT"
+readme = "README.md"
+repository = "https://github.com/kracekumar/jut/"
 
 [tool.poetry.dependencies]
 python = "^3.6.1"
