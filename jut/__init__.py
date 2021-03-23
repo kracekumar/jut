@@ -69,6 +69,7 @@ class Config(BaseModel):
     tail: int
     single_page: bool
     full_display: bool
+    force_colors: bool
 
     @validator("input_file")
     def validate_input_file(cls, val):
@@ -147,7 +148,7 @@ class Render(FormatMixin):
         custom_theme = Theme(
             {"info": "dim cyan", "warning": "magenta", "danger": "bold red"}
         )
-        self.console = Console(theme=custom_theme)
+        self.console = Console(theme=custom_theme, force_terminal=config.force_colors)
 
     def parse_notebook(self):
         """Parse the notebook content."""

@@ -52,7 +52,14 @@ def download_url(url):
     is_flag=True,
     help="Should all the contents in the file displayed?",
 )
-def display(url, input_file, head, tail, single_page, full_display):
+@click.option(
+    "--force-colors",
+    type=bool,
+    default=False,
+    is_flag=True,
+    help="Force colored output even if stdout is not a terminal",
+)
+def display(url, input_file, head, tail, single_page, full_display, force_colors):
     destination_file = None
     if url:
         destination_file = download_url(url)
@@ -77,6 +84,7 @@ def display(url, input_file, head, tail, single_page, full_display):
             tail=tail,
             single_page=single_page,
             full_display=full_display,
+            force_colors=force_colors,
         )
         render = Render(config)
         render.render()
