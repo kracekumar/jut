@@ -148,7 +148,10 @@ class Render(FormatMixin):
         custom_theme = Theme(
             {"info": "dim cyan", "warning": "magenta", "danger": "bold red"}
         )
-        self.console = Console(theme=custom_theme, force_terminal=config.force_colors)
+        if config.force_colors:
+            self.console = Console(theme=custom_theme, force_terminal=config.force_colors)
+        else:
+            self.console = Console(theme=custom_theme)
 
     def parse_notebook(self):
         """Parse the notebook content."""
