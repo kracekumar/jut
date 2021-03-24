@@ -19,6 +19,9 @@ Options:
   -t, --tail INTEGER         Display last n cells
   -p, --single-page          Should the result be in a single page?
   -f, --full-display         Should all the contents in the file displayed?
+  --force-colors             Force colored output even if stdout is not a
+                             terminal
+
   --help                     Show this message and exit.
 
 ```
