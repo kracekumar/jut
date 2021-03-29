@@ -14,14 +14,16 @@ Usage: jut [OPTIONS]
 
 Options:
   -u, --url TEXT             Render the ipynb file from the URL
-  -i, --input-file FILENAME  File from the local file-system
-  -h, --head INTEGER         Display first n cells. Default is 10
-  -t, --tail INTEGER         Display last n cells
+  -i, --input-file FILE      File from the local file-system
+  -he, --head INTEGER RANGE  Display first n cells. Default is 10
+  -t, --tail INTEGER RANGE   Display last n cells
   -p, --single-page          Should the result be in a single page?
   -f, --full-display         Should all the contents in the file displayed?
   --force-colors             Force colored output even if stdout is not a
                              terminal
 
+  -s, --start INTEGER RANGE  Display the cells starting from the cell number
+  -e, --end INTEGER RANGE    Display the cells till the cell number
   --help                     Show this message and exit.
 
 ```
