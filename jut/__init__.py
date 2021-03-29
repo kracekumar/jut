@@ -222,10 +222,10 @@ class Render(FormatMixin):
             start = 0
         elif self.config.tail:
             block = self.node.cells[-self.config.tail :]
-            start = len(self.node.cells) - self.config.tail
+            start = max(len(self.node.cells) - self.config.tail, 0)
         elif self.config.is_cell_range():
-            block = self.node.cells[self.config.start:self.config.end]
-            start = self.config.start
+            block = self.node.cells[self.config.start - 1:self.config.end]
+            start = self.config.start - 1
 
         for cell in block:
             start += 1
