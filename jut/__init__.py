@@ -4,10 +4,10 @@
 import io
 from enum import Enum
 from pathlib import Path, PosixPath
-from typing import Any
+from typing import Any, Optional, Union
 
 import nbformat
-from pydantic import BaseModel, ValidationError, validator
+from pydantic import BaseModel, ValidationError, validator, root_validator, PositiveInt
 from rich.columns import Columns
 from rich.console import Console, RenderGroup
 from rich.markdown import Markdown
@@ -64,18 +64,66 @@ def can_render_in_terminal(mime_type: str):
 class Config(BaseModel):
     """Input config passed by the user."""
 
-    input_file: Any
-    head: int
-    tail: int
+    input_file: PosixPath
+    head: PositiveInt
+    tail: Optional[PositiveInt]
     single_page: bool
     full_display: bool
     force_colors: bool
+    start: Optional[PositiveInt]
+    end: Optional[PositiveInt]
+
+    class Config:
+        arbitrary_types_allowed = True
+
+    def is_cell_range(self):
+        return self.start <= self.end
 
     @validator("input_file")
     def validate_input_file(cls, val):
-        if not isinstance(val, (io.TextIOWrapper, PosixPath)):
-            raise ValueError(f"input_file is not valid path: {val}")
+        if isinstance(val, PosixPath):
+            if val.exists() and val.is_dir():
+                raise ValueError(f'input_file: {val} is not the notebook')
+
         return val
+
+    @classmethod
+    def validate_tail(cls, values):
+        val = values.get('tail')
+        if val is not None:
+            if val > 0:
+                if values.get('head'):
+                    values['head'] = None
+
+                if values.get('start'):
+                    values['start'] = None
+
+                if values.get('end'):
+                    values['end'] = None
+
+        return values
+
+    @classmethod
+    def validate_cell_range(cls, values):
+        start, end = values.get('start'), values.get('end')
+        if start is None or end is None:
+            return values
+
+        if start >= 0 and end >= 0:
+            if start >= end:
+                raise ValueError(f'--start should be greater than --end. Received, start: {start}, end: {end}')
+
+            if start <= end:
+                values['head'] = None
+                values['tail'] = None
+
+        return values
+
+    @root_validator
+    def validate_all(cls, values):
+        values = cls.validate_tail(values)
+        values = cls.validate_cell_range(values)
+        return values
 
 
 class FormatMixin:
@@ -173,6 +221,9 @@ class Render(FormatMixin):
         elif self.config.tail:
             block = self.node.cells[-self.config.tail :]
             start = len(self.node.cells) - self.config.tail
+        elif self.config.is_cell_range():
+            block = self.node.cells[self.config.start:self.config.end]
+            start = self.config.start
 
         for cell in block:
             start += 1

@@ -1,6 +1,7 @@
 """CLI interface
 """
 import logging
+import rich
 from pathlib import Path
 from urllib.error import HTTPError
 from urllib.parse import urlparse
@@ -30,12 +31,13 @@ def download_url(url):
     "-u", "--url", type=str, default="", help="Render the ipynb file from the URL"
 )
 @click.option(
-    "-i", "--input-file", type=click.File(), help="File from the local file-system"
+    "-i", "--input-file", type=click.Path(exists=True, dir_okay=False, resolve_path=True),
+    help="File from the local file-system"
 )
 @click.option(
-    "-h", "--head", type=int, default=10, help="Display first n cells. Default is 10"
+    "-he", "--head", type=click.IntRange(min=1), default=10, help="Display first n cells. Default is 10"
 )
-@click.option("-t", "--tail", type=int, default=-1, help="Display last n cells")
+@click.option("-t", "--tail", type=click.IntRange(min=1), default=None, help="Display last n cells")
 @click.option(
     "-p",
     "--single-page",
@@ -59,7 +61,21 @@ def download_url(url):
     is_flag=True,
     help="Force colored output even if stdout is not a terminal",
 )
-def display(url, input_file, head, tail, single_page, full_display, force_colors):
+@click.option(
+    "-s",
+    "--start",
+    type=click.IntRange(min=1),
+    default=None,
+    help="Display the cells starting from the cell number"
+)
+@click.option(
+    "-e",
+    "--end",
+    type=click.IntRange(min=1),
+    default=None,
+    help="Display the cells till the cell number"
+)
+def display(url, input_file, head, tail, single_page, full_display, force_colors, start, end):
     destination_file = None
     if url:
         destination_file = download_url(url)
@@ -74,9 +90,6 @@ def display(url, input_file, head, tail, single_page, full_display, force_colors
         click.echo(display.get_help(ctx))
         exit(-1)
 
-    if tail > 0:
-        head = 0
-
     try:
         config = Config(
             input_file=destination_file,
@@ -85,11 +98,14 @@ def display(url, input_file, head, tail, single_page, full_display, force_colors
             single_page=single_page,
             full_display=full_display,
             force_colors=force_colors,
+            start=start,
+            end=end
         )
         render = Render(config)
         render.render()
     except (ValidationError, ParsingException, RenderingException) as e:
-        render.console.print(e)
+        rich.print(e)
+        exit(-1)
 
 
 def main():
