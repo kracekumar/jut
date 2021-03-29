@@ -36,3 +36,8 @@ jobs:
           source $VENV
           pytest -s -v --cov=jut --cov-report=term-missing  tests/
           coverage report
+
+      - name: Run Mypy
+        run: |
+          source $VENV
+          mypy jut

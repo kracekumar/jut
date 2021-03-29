@@ -6,8 +6,9 @@ from enum import Enum
 from pathlib import Path, PosixPath
 from typing import Any, Optional, Union
 
-import nbformat
-from pydantic import BaseModel, ValidationError, validator, root_validator, PositiveInt
+import nbformat  # type: ignore
+from pydantic import (BaseModel, PositiveInt, ValidationError, root_validator,
+                      validator)
 from rich.columns import Columns
 from rich.console import Console, RenderGroup
 from rich.markdown import Markdown
@@ -135,6 +136,7 @@ class FormatMixin:
             return f"[green]In [/][bold green][{index}]: [/bold green]"
         elif source_type == "output":
             return f"[red]Out [/][bold red][{index}]: [/bold red]"
+        return "{index}"
 
     def format_markdown(self, index, cell):
         """Format the markdown cell content. Render only input and leave out output."""

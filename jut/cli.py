@@ -1,13 +1,13 @@
 """CLI interface
 """
 import logging
-import rich
 from pathlib import Path
 from urllib.error import HTTPError
 from urllib.parse import urlparse
 from urllib.request import urlretrieve
 
 import click
+import rich
 
 from jut import (Config, ParsingException, Render, RenderingException,
                  ValidationError)

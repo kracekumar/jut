@@ -22,6 +22,8 @@ parameterized = "^0.8.1"
 jupyter = "^1.0.0"
 pytest-cov = "^2.11.1"
 pre-commit = "^2.11.1"
+mypy = "^0.812"
+pylint = "^2.7.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
