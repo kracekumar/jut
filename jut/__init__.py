@@ -7,8 +7,7 @@ from pathlib import Path, PosixPath
 from typing import Any, Optional, Union
 
 import nbformat  # type: ignore
-from pydantic import (BaseModel, PositiveInt, ValidationError, root_validator,
-                      validator)
+from pydantic import BaseModel, PositiveInt, ValidationError, root_validator, validator
 from rich.columns import Columns
 from rich.console import Console, RenderGroup
 from rich.markdown import Markdown
@@ -84,39 +83,41 @@ class Config(BaseModel):
     def validate_input_file(cls, val):
         if isinstance(val, PosixPath):
             if val.exists() and val.is_dir():
-                raise ValueError(f'input_file: {val} is not the notebook')
+                raise ValueError(f"input_file: {val} is not the notebook")
 
         return val
 
     @classmethod
     def validate_tail(cls, values):
-        val = values.get('tail')
+        val = values.get("tail")
         if val is not None:
             if val > 0:
-                if values.get('head'):
-                    values['head'] = None
+                if values.get("head"):
+                    values["head"] = None
 
-                if values.get('start'):
-                    values['start'] = None
+                if values.get("start"):
+                    values["start"] = None
 
-                if values.get('end'):
-                    values['end'] = None
+                if values.get("end"):
+                    values["end"] = None
 
         return values
 
     @classmethod
     def validate_cell_range(cls, values):
-        start, end = values.get('start'), values.get('end')
+        start, end = values.get("start"), values.get("end")
         if start is None or end is None:
             return values
 
         if start >= 0 and end >= 0:
             if start >= end:
-                raise ValueError(f'--start should be greater than --end. Received, start: {start}, end: {end}')
+                raise ValueError(
+                    f"--start should be greater than --end. Received, start: {start}, end: {end}"
+                )
 
             if start <= end:
-                values['head'] = None
-                values['tail'] = None
+                values["head"] = None
+                values["tail"] = None
 
         return values
 
@@ -159,7 +160,9 @@ class FormatMixin:
                 code = Syntax(output_text, lexer_name=lexer_name)
                 panels.append(Panel(code))
             else:
-                panels.append(Panel(f"[bold red] Not rendering {lexer_name} [/bold red]"))
+                panels.append(
+                    Panel(f"[bold red] Not rendering {lexer_name} [/bold red]")
+                )
         return panels
 
     def format_raw(self, index, cell):
@@ -199,7 +202,9 @@ class Render(FormatMixin):
             {"info": "dim cyan", "warning": "magenta", "danger": "bold red"}
         )
         if config.force_colors:
-            self.console = Console(theme=custom_theme, force_terminal=config.force_colors)
+            self.console = Console(
+                theme=custom_theme, force_terminal=config.force_colors
+            )
         else:
             self.console = Console(theme=custom_theme)
 
@@ -224,7 +229,7 @@ class Render(FormatMixin):
             block = self.node.cells[-self.config.tail :]
             start = max(len(self.node.cells) - self.config.tail, 0)
         elif self.config.is_cell_range():
-            block = self.node.cells[self.config.start - 1:self.config.end]
+            block = self.node.cells[self.config.start - 1 : self.config.end]
             start = self.config.start - 1
 
         for cell in block:
