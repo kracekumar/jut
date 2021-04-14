@@ -22,7 +22,6 @@ Options:
 
   -s, --start INTEGER RANGE  Display the cells starting from the cell number
   -e, --end INTEGER RANGE    Display the cells till the cell number
-  --stdin                    Receive the input from the stdin
   --help                     Show this message and exit.
 ```
 
@@ -44,9 +43,11 @@ Options:
 ![jut-download-url](https://raw.githubusercontent.com/kracekumar/jut/main/images/jut-download.png)
 
 
-### Take input from stdin
+### Usage
 
 ``` shell
-$curl -s -N https://raw.githubusercontent.com/fastai/fastbook/master/06_multicat.ipynb | jut --stdin --head 5
+$run jut debug/file.ipynb
+...
+$jut https://raw.githubusercontent.com/fastai/fastbook/master/06_multicat.ipynb --tail 10
 ...
 ```

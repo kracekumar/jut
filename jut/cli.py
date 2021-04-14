@@ -10,7 +10,8 @@ from urllib.request import urlretrieve
 import click
 import rich
 
-from jut import Config, ParsingException, Render, RenderingException, ValidationError
+from jut import (Config, ParsingException, Render, RenderingException,
+                 ValidationError)
 
 logger = logging.getLogger(__name__)
 
@@ -35,22 +36,6 @@ def download_url(url):
         logger.info(f'Failed to download the file in the URL" {url}')
         exit(-1)
     return destination
-
-
-def handle_stdin() -> Path:
-    """Receive input from stdin and store it in a sample file.
-
-    Returns
-    -------
-        The path to the temporary file
-    """
-    buf = ""
-    for line in sys.stdin:
-        buf += line
-    filename = "stdin.ipynb"
-    with open(filename, "w") as fp:
-        fp.write(buf)
-    return Path(filename)
 
 
 @click.command()
@@ -106,24 +91,7 @@ def handle_stdin() -> Path:
     default=None,
     help="Display the cells till the cell number",
 )
-@click.option(
-    "--stdin",
-    type=bool,
-    default=False,
-    is_flag=True,
-    help="Receive the input from the stdin",
-)
-def display(
-    path,
-    head,
-    tail,
-    single_page,
-    full_display,
-    force_colors,
-    start,
-    end,
-    stdin,
-):
+def display(path, head, tail, single_page, full_display, force_colors, start, end):
     destination_file = None
     url, input_file = parse_path(path)
 
@@ -134,9 +102,7 @@ def display(
     if input_file:
         destination_file = Path(input_file)
 
-    if stdin:
-        destination_file = handle_stdin()
-    elif not destination_file.exists():
+    if not destination_file.exists():
         click.echo(
             f"PATH: {path} should be URL or path to a local file. The file is missing.",
             err=True,
@@ -159,7 +125,7 @@ def display(
         render = Render(config)
         render.render()
 
-        if url or stdin:
+        if url:
             Path(destination_file).unlink()
     except (ValidationError, ParsingException, RenderingException) as e:
         rich.print(e)

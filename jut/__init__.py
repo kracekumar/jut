@@ -7,7 +7,8 @@ from pathlib import Path, PosixPath
 from typing import Any, Optional, Union
 
 import nbformat  # type: ignore
-from pydantic import BaseModel, PositiveInt, ValidationError, root_validator, validator
+from pydantic import (BaseModel, PositiveInt, ValidationError, root_validator,
+                      validator)
 from rich.columns import Columns
 from rich.console import Console, RenderGroup
 from rich.markdown import Markdown
