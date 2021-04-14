@@ -15,6 +15,17 @@ from jut import Config, ParsingException, Render, RenderingException, Validation
 logger = logging.getLogger(__name__)
 
 
+def parse_path(path: str):
+    """Given a path return a tuple of (URL, local_file_path).
+    At any given point, either url or local_path will be present.
+    """
+    # Note: It's a simpler solution only draw back is URL like foo.com/mydrive/notebook.ipynb will be treated as file.
+    parts = urlparse(path)
+    if parts.scheme and parts.netloc:
+        return path, ""
+    return "", path
+
+
 def download_url(url):
     url_parts = urlparse(url)
     try:
@@ -43,15 +54,7 @@ def handle_stdin() -> Path:
 
 
 @click.command()
-@click.option(
-    "-u", "--url", type=str, default="", help="Render the ipynb file from the URL"
-)
-@click.option(
-    "-i",
-    "--input-file",
-    type=click.Path(exists=True, dir_okay=False, resolve_path=True),
-    help="File from the local file-system",
-)
+@click.argument("path", type=str)
 @click.option(
     "-he",
     "--head",
@@ -111,8 +114,7 @@ def handle_stdin() -> Path:
     help="Receive the input from the stdin",
 )
 def display(
-    url,
-    input_file,
+    path,
     head,
     tail,
     single_page,
@@ -123,17 +125,22 @@ def display(
     stdin,
 ):
     destination_file = None
+    url, input_file = parse_path(path)
+
     if url:
         destination_file = download_url(url)
         destination_file = Path(destination_file)
 
     if input_file:
-        destination_file = input_file
+        destination_file = Path(input_file)
 
     if stdin:
         destination_file = handle_stdin()
-    elif not (url or input_file):
-        click.echo("pass --url or --input-file value", err=True)
+    elif not destination_file.exists():
+        click.echo(
+            f"PATH: {path} should be URL or path to a local file. The file is missing.",
+            err=True,
+        )
         ctx = click.get_current_context()
         click.echo(display.get_help(ctx))
         exit(-1)
