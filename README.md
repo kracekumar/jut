@@ -10,11 +10,9 @@ The command line tool view the IPython/Jupyter notebook in the terminal.
 
 ``` shell
 $jut --help
-Usage: jut [OPTIONS]
+Usage: cli.py [OPTIONS] PATH
 
 Options:
-  -u, --url TEXT             Render the ipynb file from the URL
-  -i, --input-file FILE      File from the local file-system
   -he, --head INTEGER RANGE  Display first n cells. Default is 10
   -t, --tail INTEGER RANGE   Display last n cells
   -p, --single-page          Should the result be in a single page?
