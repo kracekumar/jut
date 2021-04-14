@@ -25,10 +25,11 @@ Options:
   --help                     Show this message and exit.
 ```
 
-### ASCIICinema Demo
+### ASCIICinema Demo (First version)
 
 [![asciicast](https://asciinema.org/a/400349.svg)](https://asciinema.org/a/400349)
 
+Note: Command line arguments may be different, use `jut --help` to get upto date command line options
 
 ### Display first five cells
 
