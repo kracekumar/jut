@@ -91,7 +91,24 @@ def download_url(url):
     default=None,
     help="Display the cells till the cell number",
 )
-def display(path, head, tail, single_page, full_display, force_colors, start, end):
+@click.option(
+    "--exclude-output-cells",
+    type=bool,
+    help="Exclude the notebook output cells from output",
+    default=False,
+    is_flag=True,
+)
+def display(
+    path,
+    head,
+    tail,
+    single_page,
+    full_display,
+    force_colors,
+    start,
+    end,
+    exclude_output_cells,
+):
     destination_file = None
     url, input_file = parse_path(path)
 
@@ -121,6 +138,7 @@ def display(path, head, tail, single_page, full_display, force_colors, start, en
             force_colors=force_colors,
             start=start,
             end=end,
+            exclude_output_cells=exclude_output_cells,
         )
         render = Render(config)
         render.render()

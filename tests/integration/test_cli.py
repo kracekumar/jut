@@ -13,6 +13,7 @@ from jut.cli import display
             0,
         ),
         ("tests/test1_all.ipynb --tail 1", 0),
+        ("tests/test1_all.ipynb --exclude-output-cells", 0),
         ("tests/test1_all.ipynb --start 1 --end 3", 0),
         # Failure cases
         ("--head 5", 2),
