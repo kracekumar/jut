@@ -94,7 +94,7 @@ def download_url(url):
 @click.option(
     "--exclude-output-cells",
     type=bool,
-    help="Exclude the notebook output cells from output",
+    help="Exclude the notebook output cells from the output",
     default=False,
     is_flag=True,
 )

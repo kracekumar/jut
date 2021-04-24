@@ -22,6 +22,7 @@ Options:
 
   -s, --start INTEGER RANGE  Display the cells starting from the cell number
   -e, --end INTEGER RANGE    Display the cells till the cell number
+  --exclude-output-cells     Exclude the notebook output cells from the output
   --help                     Show this message and exit.
 ```
 
