@@ -98,6 +98,13 @@ def download_url(url):
     default=False,
     is_flag=True,
 )
+@click.option(
+    "--no-cell-border",
+    type=bool,
+    help="Don't display the result in a cell with border",
+    default=False,
+    is_flag=True,
+)
 def display(
     path,
     head,
@@ -108,6 +115,7 @@ def display(
     start,
     end,
     exclude_output_cells,
+    no_cell_border,
 ):
     destination_file = None
     url, input_file = parse_path(path)
@@ -139,6 +147,7 @@ def display(
             start=start,
             end=end,
             exclude_output_cells=exclude_output_cells,
+            no_cell_border=no_cell_border,
         )
         render = Render(config)
         render.render()

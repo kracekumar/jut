@@ -6,7 +6,7 @@ from pydantic import ValidationError
 
 from jut import Config, ParsingException, Render
 
-config_datas = [
+config_data = [
     (
         {
             "input_file": "",
@@ -18,6 +18,7 @@ config_datas = [
             "start": None,
             "end": None,
             "exclude_output_cells": False,
+            "no_cell_border": True,
         },
         ValidationError,
     ),
@@ -32,6 +33,7 @@ config_datas = [
             "start": None,
             "end": None,
             "exclude_output_cells": False,
+            "no_cell_border": True,
         },
         False,
     ),
@@ -46,6 +48,7 @@ config_datas = [
             "start": None,
             "end": None,
             "exclude_output_cells": False,
+            "no_cell_border": True,
         },
         ValidationError,
     ),
@@ -60,6 +63,7 @@ config_datas = [
             "start": None,
             "end": None,
             "exclude_output_cells": False,
+            "no_cell_border": True,
         },
         ValidationError,
     ),
@@ -74,6 +78,7 @@ config_datas = [
             "start": None,
             "end": None,
             "exclude_output_cells": False,
+            "no_cell_border": True,
         },
         ValidationError,
     ),
@@ -88,6 +93,7 @@ config_datas = [
             "start": 5,
             "end": 10,
             "exclude_output_cells": False,
+            "no_cell_border": True,
         },
         ValidationError,
     ),
@@ -102,6 +108,7 @@ config_datas = [
             "start": 5,
             "end": 10,
             "exclude_output_cells": False,
+            "no_cell_border": True,
         },
         ValidationError,
     ),  # tail < 1
@@ -116,6 +123,7 @@ config_datas = [
             "start": 10,
             "end": 5,
             "exclude_output_cells": False,
+            "no_cell_border": True,
         },
         ValidationError,
     ),
@@ -130,6 +138,7 @@ config_datas = [
             "start": 10,
             "end": 15,
             "exclude_output_cells": False,
+            "no_cell_border": True,
         },
         ValidationError,
     ),
@@ -144,13 +153,14 @@ config_datas = [
             "start": 0,
             "end": 0,
             "exclude_output_cells": False,
+            "no_cell_border": True,
         },
         ValidationError,
     ),
 ]
 
 
-@parameterized.expand(config_datas)
+@parameterized.expand(config_data)
 def test_config(config_data, exception):
     if exception:
         with pytest.raises(exception):
@@ -173,6 +183,7 @@ class TestRender:
                     "start": None,
                     "end": None,
                     "exclude_output_cells": False,
+                    "no_cell_border": True,
                 },
                 False,
             ),
@@ -187,6 +198,7 @@ class TestRender:
                     "start": None,
                     "end": None,
                     "exclude_output_cells": False,
+                    "no_cell_border": False,
                 },
                 ParsingException,
             ),
@@ -216,6 +228,7 @@ class TestRender:
                 "start": None,
                 "end": None,
                 "exclude_output_cells": False,
+                "no_cell_border": True,
             }
         )
         render = Render(config)

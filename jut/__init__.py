@@ -74,6 +74,7 @@ class Config(BaseModel):
     start: Optional[PositiveInt]
     end: Optional[PositiveInt]
     exclude_output_cells: bool
+    no_cell_border: bool
 
     class Config:
         arbitrary_types_allowed = True
@@ -141,38 +142,59 @@ class FormatMixin:
             return f"[red]Out [/][bold red][{index}]: [/bold red]"
         return "{index}"
 
-    def format_markdown(self, index, cell, exclude_output_cells):
+    def format_markdown(self, index, cell, config):
         """Format the markdown cell content. Render only input and leave out output."""
         panels = []
         panels.append(self.format_index(index, source_type="input"))
         source = self.get_source_text(cell)
-        panels.append(Panel(Markdown(source)))
+        if config.no_cell_border:
+            panels.append("\n")
+            panels.append(Markdown(source))
+            panels.append("\n")
+        else:
+            panels.append(Panel(Markdown(source)))
         return panels
 
-    def format_code(self, index, cell, exclude_output_cells):
+    def format_code(self, index, cell, config):
         """Format the code block. Print both the source and output."""
         panels = []
         panels.append(self.format_index(index, source_type="input"))
         code = Syntax(self.get_source_text(cell), lexer_name="python")
-        panels.append(Panel(code))
-        if not exclude_output_cells:
+        if config.no_cell_border:
+            panels.append("\n")
+            panels.append(code)
+            panels.append("\n")
+        else:
+            panels.append(Panel(code))
+        if not config.exclude_output_cells:
             for output in cell.get("outputs"):
                 panels.append(self.format_index(index, source_type="output"))
                 output_text, lexer_name = self.get_output_text(output)
                 if can_render_in_terminal(lexer_name):
                     code = Syntax(output_text, lexer_name=lexer_name)
-                    panels.append(Panel(code))
+                    if config.no_cell_border:
+                        panels.append("\n")
+                        panels.append(code)
+                        panels.append("\n")
+                    else:
+                        panels.append(Panel(code))
                 else:
                     panels.append(
                         Panel(f"[bold red] Not rendering {lexer_name} [/bold red]")
                     )
         return panels
 
-    def format_raw(self, index, cell, exclude_output_cells):
+    def format_raw(self, index, cell, config):
         """Format raw code block. Render only input source."""
         panels = []
         panels.append(self.format_index(index))
-        panels.append(Panel(self.get_source_text(cell)))
+        text = self.get_source_text(cell)
+        if config.no_cell_border:
+            panels.append("\n")
+            panels.append(text)
+            panels.append("\n")
+        else:
+            panels.append(Panel(text))
         return panels
 
     def get_source_text(self, cell):
@@ -242,11 +264,11 @@ class Render(FormatMixin):
     def format_cell(self, index, cell):
         cell_type = cell.get("cell_type")
         if cell_type == CellType.MARKDOWN.value:
-            return self.format_markdown(index, cell, self.config.exclude_output_cells)
+            return self.format_markdown(index, cell, self.config)
         elif cell_type == CellType.CODE.value:
-            return self.format_code(index, cell, self.config.exclude_output_cells)
+            return self.format_code(index, cell, self.config)
         elif cell_type == CellType.RAW.value:
-            return self.format_raw(index, cell, self.config.exclude_output_cells)
+            return self.format_raw(index, cell, self.config)
 
     def render_cell(self, panels):
         self.console.print(*panels)
