@@ -31,20 +31,17 @@ jobs:
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --no-interaction --no-root
 
-      - name: Run tests
-        run: |
-          source $VENV
-          pytest -s -v --cov=jut --cov-report=term-missing  tests/
-          coverage report
-
       - name: Run Mypy
         run: |
           source $VENV
           mypy jut
 
-      - name: Report results to DeepSource
+      - name: Report tests and send results to DeepSource
         run: |
           # Generate coverage report in xml format
+          source $VENV
+          pytest -s -v --cov=jut --cov-report=term-missing  tests/
+          coverage report
           coverage xml
 
           # Install deepsource CLI
