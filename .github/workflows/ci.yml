@@ -36,21 +36,10 @@ jobs:
           source $VENV
           mypy jut
 
-      - name: Set Deepsource env
-        env:
-            DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}
-
-
-      - name: Report tests and send results to DeepSource
+      - name: Report tests
         run: |
           # Generate coverage report in xml format
           source $VENV
           pytest -s -v --cov=jut --cov-report=term-missing  tests/
           coverage report
           coverage xml
-
-          # Install deepsource CLI
-          curl https://deepsource.io/cli | sh
-
-          # From the root directory, run the report coverage command
-          ./bin/deepsource report --analyzer test-coverage --key python --value-file ./coverage.xml
