@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "jut"
-version = "0.0.21"
+version = "0.0.22"
 description = "Render Jupyter Notebook in the terminal"
 authors = ["kracekumar <me@kracekumar.com>"]
 license = "MIT"

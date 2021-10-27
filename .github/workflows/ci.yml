@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.6', '3.7', '3.8']
+        python-version: ['3.6', '3.7', '3.8', '3.9']
 
     steps:
       - uses: actions/checkout@v2
@@ -36,19 +36,10 @@ jobs:
           source $VENV
           mypy jut
 
-      - name: Report tests and send results to DeepSource
+      - name: Report tests
         run: |
           # Generate coverage report in xml format
           source $VENV
           pytest -s -v --cov=jut --cov-report=term-missing  tests/
           coverage report
           coverage xml
-
-          # Install deepsource CLI
-          curl https://deepsource.io/cli | sh
-
-          # From the root directory, run the report coverage command
-          ./bin/deepsource report --analyzer test-coverage --key python --value-file ./coverage.xml
-
-          env:
-            DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}
