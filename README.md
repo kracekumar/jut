@@ -49,7 +49,7 @@ Note: Command line arguments may be different, use `jut --help` to get upto date
 ### Usage
 
 ``` shell
-$run jut debug/file.ipynb
+$jut debug/file.ipynb
 ...
 $jut https://raw.githubusercontent.com/fastai/fastbook/master/06_multicat.ipynb --tail 10
 ...
